@@ -16,10 +16,9 @@ export const SchedulerWrapper = styled(Box)({
 
 export const TableWrapper = (props) => (
   <Box
-    mt={10}
     sx={{
-      border: "1px solid black",
       width: "80%",
+      position: "relative",
     }}
   >
     {props.children}
