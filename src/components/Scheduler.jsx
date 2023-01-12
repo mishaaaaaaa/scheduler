@@ -17,59 +17,10 @@ import TableHeadCell from "./TableHeadCell";
 import TableBodyCell from "./TableBodyCell";
 import { grey } from "@mui/material/colors";
 import days_json from "../consts/days.json";
+import useHandlePeriod from "../hooks/useHandlePeriod";
 
 function createData(day, isSelectedRowPeriod, data) {
   return { day, isSelectedRowPeriod, data };
-}
-
-function jsonToArray(json) {
-  let daysArr = [];
-
-  for (let i in json) {
-    daysArr.push({ day: i, period: json[i] });
-  }
-  return daysArr;
-}
-
-const daysFromJson = jsonToArray(days_json);
-
-function getIndexOfMarkedPeriods(daysJson, rows) {
-  function range(min, max) {
-    let len = max - min + 1;
-    let arr = new Array(len);
-    for (let i = 0; i < len; i++) {
-      arr[i] = min + i;
-    }
-    return arr;
-  }
-
-  const indexOfMarkedPeriods = [];
-
-  for (let i = 0; i < daysJson.length; i++) {
-    const daysPeriodJson = daysJson[i];
-    const daysPeriodRows = rows[i];
-    if (daysPeriodJson.period.length > 0) {
-      const startEndPeriodsIndex = daysPeriodJson.period.map((el) => {
-        let indexOfStartPeriod = daysPeriodRows.data.findIndex((cell) => {
-          return cell.cellMinutesPeriod.bt === el.bt;
-        });
-        let indexOfEndPeriod = daysPeriodRows.data.findIndex((cell) => {
-          return cell.cellMinutesPeriod.et === el.et;
-        });
-        return range(indexOfStartPeriod, indexOfEndPeriod);
-      });
-
-      indexOfMarkedPeriods.push({ markedPeriodIndexs: startEndPeriodsIndex });
-    } else {
-      indexOfMarkedPeriods.push({ markedPeriodIndexs: [-1] });
-    }
-  }
-
-  return indexOfMarkedPeriods.map((day) => {
-    return {
-      markedPeriodIndexs: day.markedPeriodIndexs.flat(),
-    };
-  });
 }
 
 const rows = [
@@ -82,32 +33,9 @@ const rows = [
   createData("su", false, bodyFakeData),
 ];
 
-const indexOfMarkedPeriods = getIndexOfMarkedPeriods(daysFromJson, rows);
-
-function markCellWithPeriod(week, rows) {
-  return rows.map((day, dayIndex) => {
-    return {
-      day: day.day,
-      isSelectedRowPeriod: day.isSelectedRowPeriod,
-      data: day.data.map((dayPeriod, dayPeriodIndex) => {
-        if (
-          week[dayIndex].markedPeriodIndexs.some(
-            (periodI) => periodI === dayPeriodIndex
-          )
-        ) {
-          return {
-            ...dayPeriod,
-            isSelectedCellPeriod: true,
-          };
-        } else return dayPeriod;
-      }),
-    };
-  });
-}
-
-const markCellPeriod = markCellWithPeriod(indexOfMarkedPeriods, rows);
-
 export default function DenseTable() {
+  const { getPeriodCellsFromApi } = useHandlePeriod();
+  const markCellPeriod = getPeriodCellsFromApi(days_json, rows);
   const tableGray = grey[300];
   return (
     <>
