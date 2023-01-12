@@ -33,31 +33,43 @@ function jsonToArray(json) {
 
 const daysFromJson = jsonToArray(days_json);
 
-function markCellOnPeriod(daysJson, rows) {
-  let res = [];
+function getIndexOfMarkedPeriods(daysJson, rows) {
+  function range(min, max) {
+    let len = max - min + 1;
+    let arr = new Array(len);
+    for (let i = 0; i < len; i++) {
+      arr[i] = min + i;
+    }
+    return arr;
+  }
+
+  const indexOfMarkedPeriods = [];
+
   for (let i = 0; i < daysJson.length; i++) {
     const daysPeriodJson = daysJson[i];
     const daysPeriodRows = rows[i];
     if (daysPeriodJson.period.length > 0) {
       const startEndPeriodsIndex = daysPeriodJson.period.map((el) => {
-        let indexOfStartPeiod = daysPeriodRows.data.findIndex((cell) => {
+        let indexOfStartPeriod = daysPeriodRows.data.findIndex((cell) => {
           return cell.cellMinutesPeriod.bt === el.bt;
         });
-        let indexOfEndPeiod = daysPeriodRows.data.findIndex((cell) => {
+        let indexOfEndPeriod = daysPeriodRows.data.findIndex((cell) => {
           return cell.cellMinutesPeriod.et === el.et;
         });
-        return {
-          indexOfStartPeiod,
-          indexOfEndPeiod,
-        };
+        return range(indexOfStartPeriod, indexOfEndPeriod);
       });
 
-      res.push({ periodPairs: startEndPeriodsIndex, weekIndex: i });
+      indexOfMarkedPeriods.push({ markedPeriodIndexs: startEndPeriodsIndex });
     } else {
-      res.push({ peroidPairs: 0, dayIndex: i });
+      indexOfMarkedPeriods.push({ markedPeriodIndexs: [-1] });
     }
   }
-  return res;
+
+  return indexOfMarkedPeriods.map((day) => {
+    return {
+      markedPeriodIndexs: day.markedPeriodIndexs.flat(),
+    };
+  });
 }
 
 const rows = [
@@ -70,18 +82,30 @@ const rows = [
   createData("su", false, bodyFakeData),
 ];
 
-const test = markCellOnPeriod(daysFromJson, rows);
+const indexOfMarkedPeriods = getIndexOfMarkedPeriods(daysFromJson, rows);
 
 function markCellWithPeriod(week, rows) {
-  const markedCells = week.map((day, dayIndex) => {
-    let dayPeriod;
-    const periodPairs = day.periodPairs;
-    if (periodPairs !== 0) {
-    }
+  return rows.map((day, dayIndex) => {
+    return {
+      day: day.day,
+      isSelectedRowPeriod: day.isSelectedRowPeriod,
+      data: day.data.map((dayPeriod, dayPeriodIndex) => {
+        if (
+          week[dayIndex].markedPeriodIndexs.some(
+            (periodI) => periodI === dayPeriodIndex
+          )
+        ) {
+          return {
+            ...dayPeriod,
+            isSelectedCellPeriod: true,
+          };
+        } else return dayPeriod;
+      }),
+    };
   });
 }
 
-console.log(test);
+const markCellPeriod = markCellWithPeriod(indexOfMarkedPeriods, rows);
 
 export default function DenseTable() {
   const tableGray = grey[300];
@@ -121,18 +145,22 @@ export default function DenseTable() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row, i) => {
+              {markCellPeriod.map((day, i) => {
                 return (
                   <TableRow key={i}>
                     <TableCell
                       sx={{ border: `1px solid ${tableGray}` }}
                       align="center"
                     >
-                      {row.day}
+                      {day.day}
                     </TableCell>
                     <TableCell sx={{ border: `1px solid ${tableGray}` }} />
-                    {row.data.map((cell, cellIndex) => (
-                      <TableBodyCell key={cellIndex} borderColor={tableGray} />
+                    {day.data.map((period, periodIndex) => (
+                      <TableBodyCell
+                        key={periodIndex}
+                        borderColor={tableGray}
+                        isSelected={period.isSelectedCellPeriod}
+                      />
                     ))}
                   </TableRow>
                 );
