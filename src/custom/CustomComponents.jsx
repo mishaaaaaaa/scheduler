@@ -11,14 +11,26 @@ export const SchedulerWrapper = styled(Box)({
   flexGrow: 1,
   display: "flex",
   justifyContent: "center",
-  alignItems: "start",
+  alignItems: "center",
 });
 
 export const TableWrapper = (props) => (
   <Box
     sx={{
-      width: "80%",
       position: "relative",
+    }}
+  >
+    {props.children}
+  </Box>
+);
+
+export const TablePageWrapper = (props) => (
+  <Box
+    sx={{
+      flexGrow: 1,
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "center",
     }}
   >
     {props.children}
