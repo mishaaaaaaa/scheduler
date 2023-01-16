@@ -1,6 +1,7 @@
 export default function useHandlePeriod() {
-  function getPeriodCellsFromApi(json, tableRows) {
+  function getPeriodCells(json, tableRows) {
     function jsonToArray(json) {
+      //преобразовуем полученный json в массив
       let daysArr = [];
 
       for (let i in json) {
@@ -10,6 +11,7 @@ export default function useHandlePeriod() {
     }
 
     function getIndexOfMarkedPeriods(daysJson, rows) {
+      //по каждому дню получаем массив индексов периодов с активность
       function range(min, max) {
         let len = max - min + 1;
         let arr = new Array(len);
@@ -48,6 +50,7 @@ export default function useHandlePeriod() {
       });
     }
 
+    //возвращаем массив дней; каждый день имеет массив, состоящий из 24 периодов; каждый период - это обьект, который в зависимоти оттого выбран ли он имеет соответсвующее поле isSelectedCellPeriod;
     function markCellWithPeriod(week, rows) {
       return rows.map((day, dayIndex) => {
         return {
@@ -78,5 +81,47 @@ export default function useHandlePeriod() {
     const markCellPeriod = markCellWithPeriod(indexOfMarkedPeriods, tableRows);
     return markCellPeriod;
   }
-  return { getPeriodCellsFromApi };
+
+  function postPeriodCells(daysPeriod) {
+    console.log(daysPeriod);
+    // const findStartEndValue = daysPeriod.map((day) => {
+    //   if(day.isSelectedRowPeriod){
+    //     return {
+    //       day:day.day,
+    //       period:{
+    //         bt:0,
+    //         et: 1439
+    //       }
+
+    //     }
+    //   } return {
+    //     day: day.day,
+    //     periods: day.data.map((periodCell, periodCellIndex) => {
+    //       if (periodCell.isSelectedCellPeriod) {
+    //         if(periodCellIndex === 0 && day.data[periodCellIndex + 1].isSelectedCellPeriod === false){
+    //             return {
+    //               bt: periodCell.cellMinutesPeriod.bt,
+    //               et: periodCell.cellMinutesPeriod.et
+    //             }
+    //         } else if(periodCellIndex === 0 && day.data[periodCellIndex + 1].isSelectedCellPeriod === true){
+    //             return {
+    //               bt: periodCell.cellMinutesPeriod.bt,
+    //             }
+
+    //         }else if(day.data[periodCellIndex - 1].isSelectedCellPeriod === false &&day.data[periodCellIndex - 1].isSelectedCellPeriod === false){}
+    //         else if(day.data[periodCellIndex - 1].isSelectedCellPeriod === false){
+    //           return {
+    //             bt: periodCell.cellMinutesPeriod.bt,
+    //           }
+    //         } else if(day.data[periodCellIndex - 1].isSelectedCellPeriod === false){
+
+    //         }
+    //       } else return null
+    //     }),
+    //   };
+    // });
+    // return findStartEndValue;
+  }
+
+  return { getPeriodCells, postPeriodCells };
 }

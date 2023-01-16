@@ -11,10 +11,10 @@ import {
   Button,
   Stack,
   CircularProgress,
-  Checkbox,
 } from "@mui/material/";
 import { tableCellClasses } from "@mui/material/TableCell";
 import { TablePageWrapper, TableWrapper } from "../custom/CustomComponents";
+import RowCheckbox from "./RowCheckbox";
 import { headPeriod, bodyFakeData } from "../consts/fakeData";
 import TableHeadCell from "./TableHeadCell";
 import TableBodyCell from "./TableBodyCell";
@@ -38,7 +38,7 @@ const rows = [
 
 export default function Scheduler() {
   const [daysActivity, setDaysActivity] = useState([]);
-  const { getPeriodCellsFromApi } = useHandlePeriod();
+  const { getPeriodCells, postPeriodCells } = useHandlePeriod();
   const tableGray = grey[300];
 
   function handleCellClick(dayIndex, cellIndex) {
@@ -66,46 +66,53 @@ export default function Scheduler() {
     setDaysActivity(newDaysActivity);
   }
 
-  function handleRowChange(dayIndex) {
+  function handleRowChange(isSelected, dayIndex) {
     const newDaysActivity = daysActivity.map((day, dayI) => {
       if (dayI === dayIndex) {
-        if (day.isSelectedRowPeriod) {
-          return {
-            day: day.day,
-            isSelectedRowPeriod: false,
-            data: day.data.map((period, periodI) => {
-              return {
-                ...period,
-                isSelectedCellPeriod: false,
-              };
-            }),
-          };
-        } else {
-          return {
-            day: day.day,
-            isSelectedRowPeriod: true,
-            data: day.data.map((period, periodI) => {
-              return {
-                ...period,
-                isSelectedCellPeriod: false,
-              };
-            }),
-          };
-        }
-      } else return day;
+        return {
+          day: day.day,
+          isSelectedRowPeriod: isSelected,
+          data: day.data.map((period) => {
+            return {
+              ...period,
+              isSelectedCellPeriod: isSelected,
+            };
+          }),
+        };
+      }
+      return day;
     });
+    setDaysActivity(newDaysActivity);
+  }
 
-    // setDaysActivity(newDaysActivity);
-    console.log(newDaysActivity);
+  function handleClearTable() {
+    const newDaysActivity = daysActivity.map((day, dayI) => {
+      return {
+        day: day.day,
+        isSelectedRowPeriod: false,
+        data: day.data.map((period) => {
+          return {
+            ...period,
+            isSelectedCellPeriod: false,
+          };
+        }),
+      };
+    });
+    setDaysActivity(newDaysActivity);
+  }
+
+  function handleSaveTableChanges() {
+    const json = postPeriodCells(daysActivity);
+    console.log(json);
   }
 
   useEffect(() => {
-    setDaysActivity(getPeriodCellsFromApi(days_json, rows));
+    setDaysActivity(getPeriodCells(days_json, rows)); // eslint-disable-next-line
   }, []);
 
   return (
     <TablePageWrapper>
-      {daysActivity.length == 0 ? (
+      {daysActivity.length === 0 ? (
         <CircularProgress size={"130px"} />
       ) : (
         <TableWrapper>
@@ -152,10 +159,9 @@ export default function Scheduler() {
                         {day.day}
                       </TableCell>
                       <TableCell sx={{ border: `1px solid ${tableGray}` }}>
-                        <Checkbox
-                          size="small"
-                          style={{ padding: 5 }}
-                          onChange={() => handleRowChange(dayIndex)}
+                        <RowCheckbox
+                          onRowSelect={handleRowChange}
+                          dayIndex={dayIndex}
                         />
                       </TableCell>
                       {day.data.map((period, periodIndex) => (
@@ -180,10 +186,19 @@ export default function Scheduler() {
             sx={{ position: "absolute", right: 0 }}
             mt={3}
           >
-            <Button variant="contained" color="success" size="large">
+            <Button
+              variant="contained"
+              color="success"
+              size="large"
+              onClick={handleClearTable}
+            >
               Clear
             </Button>
-            <Button variant="contained" size="large">
+            <Button
+              variant="contained"
+              size="large"
+              onClick={handleSaveTableChanges}
+            >
               Save Changes
             </Button>
           </Stack>
