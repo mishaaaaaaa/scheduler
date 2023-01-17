@@ -7,6 +7,7 @@ function TableBodyCell({
   onCellClick,
   dayIndex,
   cellIndex,
+  onMousePressed,
 }) {
   const bodyCellStyle = {
     padding: "30px 10px",
@@ -16,12 +17,23 @@ function TableBodyCell({
       cursor: "pointer",
       bgcolor: "lightgrey",
     },
+    userSelect: "none",
   };
+
+  function handleMousePressed(btnCode) {
+    if (btnCode === 1) {
+      onMousePressed(dayIndex, cellIndex);
+    }
+  }
+
   return (
     <TableCell
       sx={bodyCellStyle}
       onClick={() => onCellClick(dayIndex, cellIndex)}
-      onMouseOver={(event) => console.log(event.button)}
+      onMouseOver={(event) => {
+        event.preventDefault();
+        handleMousePressed(event.buttons);
+      }}
     ></TableCell>
   );
 }

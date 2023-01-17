@@ -104,6 +104,28 @@ export default function Scheduler() {
   function handleSaveTableChanges() {
     const test = postPeriodCells(daysActivity);
     console.log(test);
+    //JSON returns here
+  }
+
+  function handleMousePressedSelection(dayIndex, cellIndex) {
+    const newDaysActivity = daysActivity.map((day, dayI) => {
+      if (dayI === dayIndex) {
+        return {
+          day: day.day,
+          isSelectedRowPeriod: day.isSelectedRowPeriod,
+          data: day.data.map((period, periodI) => {
+            if (periodI >= cellIndex) {
+              return {
+                ...period,
+                isSelectedCellPeriod: true,
+              };
+            } else return period;
+          }),
+        };
+      } else return day;
+    });
+
+    setDaysActivity(newDaysActivity);
   }
 
   useEffect(() => {
@@ -172,6 +194,7 @@ export default function Scheduler() {
                           dayIndex={dayIndex}
                           cellIndex={periodIndex}
                           onCellClick={handleCellClick}
+                          onMousePressed={handleMousePressedSelection}
                         />
                       ))}
                     </TableRow>

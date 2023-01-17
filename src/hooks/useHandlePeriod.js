@@ -93,14 +93,16 @@ export default function useHandlePeriod() {
         let finish = null;
 
         let open = false;
-        if (day.data.every((period) => period.isSelectedCellPeriod)) {
-          daysArray.push([day.day, { bt: 0, et: 1439 }]);
-          continue;
-        }
         for (let slot of dayData) {
           if (open) {
             if (slot.isSelectedCellPeriod) {
               finish = slot.cellMinutesPeriod.et;
+              if (dayData.indexOf(slot) === dayData.length - 1) {
+                periods.push({
+                  bt: start,
+                  et: finish,
+                });
+              }
             } else {
               open = false;
               periods.push({
@@ -126,6 +128,7 @@ export default function useHandlePeriod() {
       return JSON.stringify(daysPeriodsToJson);
     }
     const daysArray = extractDaysPeriods(daysPeriod);
+    // console.log(daysArray);
     const daysPeriodsJson = refactorPeriodsToJson(daysArray);
 
     return daysPeriodsJson;
