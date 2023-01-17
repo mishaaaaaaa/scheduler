@@ -102,8 +102,8 @@ export default function Scheduler() {
   }
 
   function handleSaveTableChanges() {
-    const json = postPeriodCells(daysActivity);
-    console.log(json);
+    const test = postPeriodCells(daysActivity);
+    console.log(test);
   }
 
   useEffect(() => {

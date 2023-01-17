@@ -20,8 +20,8 @@ function TableBodyCell({
   return (
     <TableCell
       sx={bodyCellStyle}
-      // onClick={() => onCellClick(dayIndex, cellIndex)}
-      onMouseDown={() => console.log("dayIndex")}
+      onClick={() => onCellClick(dayIndex, cellIndex)}
+      onMouseOver={(event) => console.log(event.button)}
     ></TableCell>
   );
 }

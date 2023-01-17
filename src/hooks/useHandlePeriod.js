@@ -83,44 +83,52 @@ export default function useHandlePeriod() {
   }
 
   function postPeriodCells(daysPeriod) {
-    console.log(daysPeriod);
-    // const findStartEndValue = daysPeriod.map((day) => {
-    //   if(day.isSelectedRowPeriod){
-    //     return {
-    //       day:day.day,
-    //       period:{
-    //         bt:0,
-    //         et: 1439
-    //       }
+    function extractDaysPeriods(daysPeriod) {
+      const daysArray = [];
+      for (let day of daysPeriod) {
+        let dayName = day.day;
+        let dayData = day.data;
+        let periods = [];
+        let start = null;
+        let finish = null;
 
-    //     }
-    //   } return {
-    //     day: day.day,
-    //     periods: day.data.map((periodCell, periodCellIndex) => {
-    //       if (periodCell.isSelectedCellPeriod) {
-    //         if(periodCellIndex === 0 && day.data[periodCellIndex + 1].isSelectedCellPeriod === false){
-    //             return {
-    //               bt: periodCell.cellMinutesPeriod.bt,
-    //               et: periodCell.cellMinutesPeriod.et
-    //             }
-    //         } else if(periodCellIndex === 0 && day.data[periodCellIndex + 1].isSelectedCellPeriod === true){
-    //             return {
-    //               bt: periodCell.cellMinutesPeriod.bt,
-    //             }
+        let open = false;
+        if (day.data.every((period) => period.isSelectedCellPeriod)) {
+          daysArray.push([day.day, { bt: 0, et: 1439 }]);
+          continue;
+        }
+        for (let slot of dayData) {
+          if (open) {
+            if (slot.isSelectedCellPeriod) {
+              finish = slot.cellMinutesPeriod.et;
+            } else {
+              open = false;
+              periods.push({
+                bt: start,
+                et: finish,
+              });
+            }
+          } else {
+            if (slot.isSelectedCellPeriod) {
+              start = slot.cellMinutesPeriod.bt;
+              finish = slot.cellMinutesPeriod.et;
+              open = true;
+            }
+          }
+        }
+        daysArray.push([dayName, periods]);
+      }
+      return daysArray;
+    }
 
-    //         }else if(day.data[periodCellIndex - 1].isSelectedCellPeriod === false &&day.data[periodCellIndex - 1].isSelectedCellPeriod === false){}
-    //         else if(day.data[periodCellIndex - 1].isSelectedCellPeriod === false){
-    //           return {
-    //             bt: periodCell.cellMinutesPeriod.bt,
-    //           }
-    //         } else if(day.data[periodCellIndex - 1].isSelectedCellPeriod === false){
+    function refactorPeriodsToJson(daysPeriod) {
+      const daysPeriodsToJson = Object.fromEntries(daysPeriod);
+      return JSON.stringify(daysPeriodsToJson);
+    }
+    const daysArray = extractDaysPeriods(daysPeriod);
+    const daysPeriodsJson = refactorPeriodsToJson(daysArray);
 
-    //         }
-    //       } else return null
-    //     }),
-    //   };
-    // });
-    // return findStartEndValue;
+    return daysPeriodsJson;
   }
 
   return { getPeriodCells, postPeriodCells };
