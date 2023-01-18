@@ -37,7 +37,10 @@ const rows = [
 ];
 
 export default function Scheduler() {
-  const [daysActivity, setDaysActivity] = useState([]);
+  const [daysActivity, setDaysActivity] = useState(() => {
+    const days = localStorage.getItem("daysActivity");
+    return days === undefined ? [] : JSON.parse(days);
+  });
   const { getPeriodCells, postPeriodCells } = useHandlePeriod();
   const tableGray = grey[300];
 
@@ -129,8 +132,14 @@ export default function Scheduler() {
   }
 
   useEffect(() => {
-    setDaysActivity(getPeriodCells(days_json, rows)); // eslint-disable-next-line
+    if (typeof localStorage.getItem("daysActivity") === "undefined") {
+      setDaysActivity(getPeriodCells(days_json, rows)); // eslint-disable-next-line
+    }
   }, []);
+
+  useEffect(() => {
+    localStorage.setItem("daysActivity", JSON.stringify(daysActivity));
+  }, [daysActivity]);
 
   return (
     <TablePageWrapper>
