@@ -7,8 +7,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Button,
-  Stack,
   CircularProgress,
 } from "@mui/material/";
 import { tableCellClasses } from "@mui/material/TableCell";
@@ -16,14 +14,15 @@ import {
   TablePageWrapper,
   TableWrapper,
 } from "./scheduler_components/wrappers";
-import RowCheckbox from "./scheduler_components/RowCheckbox";
+import RowCheckbox from "./scheduler_components/table/RowCheckbox";
 import { headPeriod, bodyFakeData } from "./consts/fakeData";
-import TableHeadCell from "./scheduler_components/TableHeadCell";
-import TableBodyCell from "./scheduler_components/TableBodyCell";
+import TableHeadCell from "./scheduler_components/table/TableHeadCell";
+import TableBodyCell from "./scheduler_components/table/TableBodyCell";
 import { grey } from "@mui/material/colors";
 import days_json from "./consts/days.json";
 import useHandlePeriod from "./hooks/useHandlePeriod";
-import TableBodyTitleCell from "./scheduler_components/TableBodyTitleCell";
+import TableBodyTitleCell from "./scheduler_components/table/TableBodyTitleCell";
+import TableButtonGroup from "./scheduler_components/TableButtonGroup";
 
 function createData(day, isSelectedRowPeriod, data) {
   return { day, isSelectedRowPeriod, data };
@@ -200,8 +199,6 @@ export default function Scheduler() {
                       {day.data.map((period, periodIndex) => (
                         <TableBodyCell
                           key={periodIndex}
-                          customPadding={true}
-                          borderColor={tableGray}
                           isSelected={period.isSelectedCellPeriod}
                           dayIndex={dayIndex}
                           cellIndex={periodIndex}
@@ -215,28 +212,10 @@ export default function Scheduler() {
               </TableBody>
             </Table>
           </TableContainer>
-          <Stack
-            spacing={2}
-            direction="row"
-            sx={{ position: "absolute", right: 0 }}
-            mt={3}
-          >
-            <Button
-              variant="contained"
-              color="success"
-              size="large"
-              onClick={handleClearTable}
-            >
-              Clear
-            </Button>
-            <Button
-              variant="contained"
-              size="large"
-              onClick={handleSaveTableChanges}
-            >
-              Save Changes
-            </Button>
-          </Stack>
+          <TableButtonGroup
+            clearTable={handleClearTable}
+            saveChanges={handleSaveTableChanges}
+          />
         </TableWrapper>
       )}
     </TablePageWrapper>

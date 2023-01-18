@@ -5,7 +5,6 @@ import { grey } from "@mui/material/colors";
 const tableGray = grey[300];
 
 function TableBodyCell({
-  customPadding,
   isSelected,
   onCellClick,
   dayIndex,
@@ -14,7 +13,7 @@ function TableBodyCell({
   children,
 }) {
   const bodyCellStyle = {
-    padding: customPadding && "30px 10px",
+    padding: "30px 10px",
     border: `1px solid ${tableGray}`,
     bgcolor: isSelected ? "grey" : "none",
     "&:hover": {
