@@ -1,7 +1,6 @@
 export default function useHandlePeriod() {
   function getPeriodCells(json, tableRows) {
     function jsonToArray(json) {
-      //преобразовуем полученный json в массив
       let daysArr = [];
 
       for (let i in json) {
@@ -11,7 +10,6 @@ export default function useHandlePeriod() {
     }
 
     function getIndexOfMarkedPeriods(daysJson, rows) {
-      //по каждому дню получаем массив индексов периодов с активность
       function range(min, max) {
         let len = max - min + 1;
         let arr = new Array(len);
@@ -50,7 +48,6 @@ export default function useHandlePeriod() {
       });
     }
 
-    //возвращаем массив дней; каждый день имеет массив, состоящий из 24 периодов; каждый период - это обьект, который в зависимоти оттого выбран ли он имеет соответсвующее поле isSelectedCellPeriod;
     function markCellWithPeriod(week, rows) {
       return rows.map((day, dayIndex) => {
         return {
@@ -128,7 +125,6 @@ export default function useHandlePeriod() {
       return JSON.stringify(daysPeriodsToJson);
     }
     const daysArray = extractDaysPeriods(daysPeriod);
-    // console.log(daysArray);
     const daysPeriodsJson = refactorPeriodsToJson(daysArray);
 
     return daysPeriodsJson;

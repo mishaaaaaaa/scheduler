@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import {
   Table,
   TableBody,
-  TableCell,
   TableContainer,
   TableHead,
   TableRow,
@@ -13,14 +12,18 @@ import {
   CircularProgress,
 } from "@mui/material/";
 import { tableCellClasses } from "@mui/material/TableCell";
-import { TablePageWrapper, TableWrapper } from "../custom/CustomComponents";
-import RowCheckbox from "./RowCheckbox";
-import { headPeriod, bodyFakeData } from "../consts/fakeData";
-import TableHeadCell from "./TableHeadCell";
-import TableBodyCell from "./TableBodyCell";
+import {
+  TablePageWrapper,
+  TableWrapper,
+} from "./scheduler_components/wrappers";
+import RowCheckbox from "./scheduler_components/RowCheckbox";
+import { headPeriod, bodyFakeData } from "./consts/fakeData";
+import TableHeadCell from "./scheduler_components/TableHeadCell";
+import TableBodyCell from "./scheduler_components/TableBodyCell";
 import { grey } from "@mui/material/colors";
-import days_json from "../consts/days.json";
-import useHandlePeriod from "../hooks/useHandlePeriod";
+import days_json from "./consts/days.json";
+import useHandlePeriod from "./hooks/useHandlePeriod";
+import TableBodyTitleCell from "./scheduler_components/TableBodyTitleCell";
 
 function createData(day, isSelectedRowPeriod, data) {
   return { day, isSelectedRowPeriod, data };
@@ -105,9 +108,9 @@ export default function Scheduler() {
   }
 
   function handleSaveTableChanges() {
-    const test = postPeriodCells(daysActivity);
-    console.log(test);
-    //JSON returns here
+    const pickedDaysActivityJSON = postPeriodCells(daysActivity);
+    console.log(pickedDaysActivityJSON);
+    // here will be some fetch logic to post picked variants to server
   }
 
   function handleMousePressedSelection(dayIndex, cellIndex) {
@@ -160,21 +163,25 @@ export default function Scheduler() {
             >
               <TableHead>
                 <TableRow>
-                  <TableCell width="50" align="left" colSpan={1}></TableCell>
-                  <TableCell width="35" align="left" colSpan={1}></TableCell>
-                  {headPeriod.map((period, i) => (
-                    <TableHeadCell key={i} period={period} />
-                  ))}
-                </TableRow>
-                <TableRow>
-                  <TableCell width="50" colSpan={1}></TableCell>
-                  <TableCell width="35" sx={{ padding: 0 }} colSpan={1}>
-                    All Day
-                  </TableCell>
+                  <TableHeadCell></TableHeadCell>
+                  <TableHeadCell></TableHeadCell>
                   {headPeriod.map((period, i) => (
                     <TableHeadCell
                       key={i}
-                      styling={{ borderLeft: 1, borderColor: `${tableGray}` }}
+                      innerText={period}
+                      cellColSpan={3}
+                      cellPadding={0}
+                    />
+                  ))}
+                </TableRow>
+                <TableRow>
+                  <TableHeadCell></TableHeadCell>
+                  <TableHeadCell cellPadding={0} innerText="All day" />
+                  {headPeriod.map((period) => (
+                    <TableHeadCell
+                      key={period}
+                      cellColSpan={3}
+                      headCellBorder
                     />
                   ))}
                 </TableRow>
@@ -183,21 +190,17 @@ export default function Scheduler() {
                 {daysActivity.map((day, dayIndex) => {
                   return (
                     <TableRow key={dayIndex}>
-                      <TableCell
-                        sx={{ border: `1px solid ${tableGray}` }}
-                        align="center"
-                      >
-                        {day.day}
-                      </TableCell>
-                      <TableCell sx={{ border: `1px solid ${tableGray}` }}>
+                      <TableBodyTitleCell>{day.day}</TableBodyTitleCell>
+                      <TableBodyTitleCell>
                         <RowCheckbox
                           onRowSelect={handleRowChange}
                           dayIndex={dayIndex}
                         />
-                      </TableCell>
+                      </TableBodyTitleCell>
                       {day.data.map((period, periodIndex) => (
                         <TableBodyCell
                           key={periodIndex}
+                          customPadding={true}
                           borderColor={tableGray}
                           isSelected={period.isSelectedCellPeriod}
                           dayIndex={dayIndex}
