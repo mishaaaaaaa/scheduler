@@ -15,28 +15,14 @@ import {
   TableWrapper,
 } from "./scheduler_components/wrappers";
 import RowCheckbox from "./scheduler_components/table/RowCheckbox";
-import { headPeriod, bodyFakeData } from "./consts/fakeData";
+import { headPeriod } from "./consts/fakeData";
 import TableHeadCell from "./scheduler_components/table/TableHeadCell";
 import TableBodyCell from "./scheduler_components/table/TableBodyCell";
-import { grey } from "@mui/material/colors";
 import days_json from "./consts/days.json";
 import useHandlePeriod from "./hooks/useHandlePeriod";
 import TableBodyTitleCell from "./scheduler_components/table/TableBodyTitleCell";
 import TableButtonGroup from "./scheduler_components/TableButtonGroup";
-
-function createData(day, isSelectedRowPeriod, data) {
-  return { day, isSelectedRowPeriod, data };
-}
-
-const rows = [
-  createData("mo", false, bodyFakeData),
-  createData("tu", false, bodyFakeData),
-  createData("we", false, bodyFakeData),
-  createData("th", false, bodyFakeData),
-  createData("fr", false, bodyFakeData),
-  createData("sa", false, bodyFakeData),
-  createData("su", false, bodyFakeData),
-];
+import useCreateRows from "./hooks/useCreateRows";
 
 export default function Scheduler() {
   const [daysActivity, setDaysActivity] = useState(() => {
@@ -44,7 +30,7 @@ export default function Scheduler() {
     return days === undefined ? [] : JSON.parse(days);
   });
   const { getPeriodCells, postPeriodCells } = useHandlePeriod();
-  const tableGray = grey[300];
+  const rows = useCreateRows();
 
   function handleCellClick(dayIndex, cellIndex) {
     const newDaysActivity = daysActivity.map((day, dayI) => {
