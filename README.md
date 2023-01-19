@@ -1,6 +1,6 @@
 ## Project idea
 
-This app gives you a Scheduler component which accepts data in JSON format from a server, visualizes the data
+This app gives you a MUI-based Scheduler component which accepts data in JSON format from a server, visualizes the data
 in the table, takes the user's table modifications on data and posts data back to the server.
 
 ## Scheduler features
