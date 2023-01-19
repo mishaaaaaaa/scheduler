@@ -73,6 +73,27 @@ export default function Scheduler() {
     setDaysActivity(newDaysActivity);
   }
 
+  function handleMousePressedSelection(dayIndex, cellIndex) {
+    const newDaysActivity = daysActivity.map((day, dayI) => {
+      if (dayI === dayIndex) {
+        return {
+          day: day.day,
+          isSelectedRowPeriod: day.isSelectedRowPeriod,
+          data: day.data.map((period, periodI) => {
+            if (periodI >= cellIndex) {
+              return {
+                ...period,
+                isSelectedCellPeriod: true,
+              };
+            } else return period;
+          }),
+        };
+      } else return day;
+    });
+
+    setDaysActivity(newDaysActivity);
+  }
+
   function handleClearTable() {
     const newDaysActivity = daysActivity.map((day) => {
       return {
@@ -93,27 +114,6 @@ export default function Scheduler() {
     const pickedDaysActivityJSON = postPeriodCells(daysActivity);
     console.log(pickedDaysActivityJSON);
     //TODO: here must be some fetch logic to post picked variants to server
-  }
-
-  function handleMousePressedSelection(dayIndex, cellIndex) {
-    const newDaysActivity = daysActivity.map((day, dayI) => {
-      if (dayI === dayIndex) {
-        return {
-          day: day.day,
-          isSelectedRowPeriod: day.isSelectedRowPeriod,
-          data: day.data.map((period, periodI) => {
-            if (periodI >= cellIndex) {
-              return {
-                ...period,
-                isSelectedCellPeriod: true,
-              };
-            } else return period;
-          }),
-        };
-      } else return day;
-    });
-
-    setDaysActivity(newDaysActivity);
   }
 
   useEffect(() => {
