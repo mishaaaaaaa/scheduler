@@ -1,8 +1,14 @@
-export default function useCreateRows() {
-  const periodTime = 60;
-  const periodAmount = 24;
+import {
+  periodTimeInMinuets,
+  amountOfPeriods,
+  daysName,
+} from "../consts/tableConsts";
 
-  const days = ["mo", "tu", "we", "th", "fr", "sa", "su"];
+export default function useCreateRows() {
+  const periodTime = periodTimeInMinuets;
+  const periodAmount = amountOfPeriods;
+
+  const days = daysName;
 
   function createDayPeriods(periodTime, amount) {
     const periods = [];

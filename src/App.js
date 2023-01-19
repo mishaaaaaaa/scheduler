@@ -9,19 +9,17 @@ const AppContainer = styled(Container)({
   display: "flex",
 });
 
-const SchedulerWrapper = styled(Box)({
-  flexGrow: 1,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-});
+// const SchedulerWrapper = styled(Box)({
+//   flexGrow: 1,
+//   display: "flex",
+//   justifyContent: "center",
+//   alignItems: "center",
+// });
 
 function App() {
   return (
     <AppContainer>
-      <SchedulerWrapper>
-        <Scheduler />
-      </SchedulerWrapper>
+      <Scheduler />
     </AppContainer>
   );
 }

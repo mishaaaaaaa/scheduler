@@ -1,28 +1,25 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
 import {
-  Table,
   TableBody,
-  TableContainer,
   TableHead,
   TableRow,
-  Paper,
   CircularProgress,
 } from "@mui/material/";
-import { tableCellClasses } from "@mui/material/TableCell";
 import {
   TablePageWrapper,
   TableWrapper,
 } from "./scheduler_components/wrappers";
 import RowCheckbox from "./scheduler_components/table/RowCheckbox";
-import { headPeriod } from "./consts/fakeData";
+import { tableHeadCellsPeriods } from "./consts/tableConsts";
 import TableHeadCell from "./scheduler_components/table/TableHeadCell";
 import TableBodyCell from "./scheduler_components/table/TableBodyCell";
-import days_json from "./consts/days.json";
+import fakeFetchDays from "./consts/fakeFetchDays.json";
 import useHandlePeriod from "./hooks/useHandlePeriod";
 import TableBodyTitleCell from "./scheduler_components/table/TableBodyTitleCell";
 import TableButtonGroup from "./scheduler_components/TableButtonGroup";
 import useCreateRows from "./hooks/useCreateRows";
+import SchedulerTable from "./scheduler_components/SchedulerTable";
 
 export default function Scheduler() {
   const [daysActivity, setDaysActivity] = useState(() => {
@@ -77,7 +74,7 @@ export default function Scheduler() {
   }
 
   function handleClearTable() {
-    const newDaysActivity = daysActivity.map((day, dayI) => {
+    const newDaysActivity = daysActivity.map((day) => {
       return {
         day: day.day,
         isSelectedRowPeriod: false,
@@ -121,7 +118,7 @@ export default function Scheduler() {
 
   useEffect(() => {
     if (typeof localStorage.getItem("daysActivity") === "undefined") {
-      setDaysActivity(getPeriodCells(days_json, rows)); // eslint-disable-next-line
+      setDaysActivity(getPeriodCells(fakeFetchDays, rows)); // eslint-disable-next-line
     }
   }, []);
 
@@ -135,69 +132,55 @@ export default function Scheduler() {
         <CircularProgress size={"130px"} />
       ) : (
         <TableWrapper>
-          <h1>Set Schedule</h1>
-          <TableContainer component={Paper}>
-            <Table
-              size="large"
-              aria-label="a dense table"
-              sx={{
-                [`& .${tableCellClasses.root}`]: {
-                  borderBottom: "none",
-                },
-              }}
-            >
-              <TableHead>
-                <TableRow>
-                  <TableHeadCell></TableHeadCell>
-                  <TableHeadCell></TableHeadCell>
-                  {headPeriod.map((period, i) => (
-                    <TableHeadCell
-                      key={i}
-                      innerText={period}
-                      cellColSpan={3}
-                      cellPadding={0}
-                    />
-                  ))}
-                </TableRow>
-                <TableRow>
-                  <TableHeadCell></TableHeadCell>
-                  <TableHeadCell cellPadding={0} innerText="All day" />
-                  {headPeriod.map((period) => (
-                    <TableHeadCell
-                      key={period}
-                      cellColSpan={3}
-                      headCellBorder
-                    />
-                  ))}
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {daysActivity.map((day, dayIndex) => {
-                  return (
-                    <TableRow key={dayIndex}>
-                      <TableBodyTitleCell>{day.day}</TableBodyTitleCell>
-                      <TableBodyTitleCell>
-                        <RowCheckbox
-                          onRowSelect={handleRowChange}
-                          dayIndex={dayIndex}
-                        />
-                      </TableBodyTitleCell>
-                      {day.data.map((period, periodIndex) => (
-                        <TableBodyCell
-                          key={periodIndex}
-                          isSelected={period.isSelectedCellPeriod}
-                          dayIndex={dayIndex}
-                          cellIndex={periodIndex}
-                          onCellClick={handleCellClick}
-                          onMousePressed={handleMousePressedSelection}
-                        />
-                      ))}
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <h2>Set Schedule</h2>
+          <SchedulerTable>
+            <TableHead>
+              <TableRow>
+                <TableHeadCell></TableHeadCell>
+                <TableHeadCell></TableHeadCell>
+                {tableHeadCellsPeriods.map((period, i) => (
+                  <TableHeadCell
+                    key={i}
+                    innerText={period}
+                    cellColSpan={3}
+                    cellPadding={0}
+                  />
+                ))}
+              </TableRow>
+              <TableRow>
+                <TableHeadCell></TableHeadCell>
+                <TableHeadCell cellPadding={0} innerText="All day" />
+                {tableHeadCellsPeriods.map((period) => (
+                  <TableHeadCell key={period} cellColSpan={3} headCellBorder />
+                ))}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {daysActivity.map((day, dayIndex) => {
+                return (
+                  <TableRow key={dayIndex}>
+                    <TableBodyTitleCell>{day.day}</TableBodyTitleCell>
+                    <TableBodyTitleCell>
+                      <RowCheckbox
+                        onRowSelect={handleRowChange}
+                        dayIndex={dayIndex}
+                      />
+                    </TableBodyTitleCell>
+                    {day.data.map((period, periodIndex) => (
+                      <TableBodyCell
+                        key={periodIndex}
+                        isSelected={period.isSelectedCellPeriod}
+                        dayIndex={dayIndex}
+                        cellIndex={periodIndex}
+                        onCellClick={handleCellClick}
+                        onMousePressed={handleMousePressedSelection}
+                      />
+                    ))}
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </SchedulerTable>
           <TableButtonGroup
             clearTable={handleClearTable}
             saveChanges={handleSaveTableChanges}

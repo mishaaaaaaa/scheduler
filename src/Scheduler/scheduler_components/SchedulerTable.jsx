@@ -1,24 +1,21 @@
 import React from "react";
-import { TableWrapper } from "./wrappers";
 import { Table, TableContainer, Paper } from "@mui/material/";
+import { tableCellClasses } from "@mui/material/TableCell";
 function SchedulerTable({ children }) {
   return (
-    <TableWrapper>
-      <h1>Set Schedule</h1>
-      <TableContainer component={Paper}>
-        <Table
-          size="large"
-          aria-label="a dense table"
-          sx={{
-            [`& .${tableCellClasses.root}`]: {
-              borderBottom: "none",
-            },
-          }}
-        >
-          {children}
-        </Table>
-      </TableContainer>
-    </TableWrapper>
+    <TableContainer component={Paper}>
+      <Table
+        size="large"
+        aria-label="a dense table"
+        sx={{
+          [`& .${tableCellClasses.root}`]: {
+            borderBottom: "none",
+          },
+        }}
+      >
+        {children}
+      </Table>
+    </TableContainer>
   );
 }
 

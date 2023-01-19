@@ -2,6 +2,7 @@ import { Box } from "@mui/material/";
 
 export const TableWrapper = (props) => (
   <Box
+    mt={5}
     sx={{
       position: "relative",
     }}
@@ -16,7 +17,6 @@ export const TablePageWrapper = (props) => (
       flexGrow: 1,
       display: "flex",
       justifyContent: "center",
-      alignItems: "center",
     }}
   >
     {props.children}
