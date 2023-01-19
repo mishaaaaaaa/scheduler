@@ -1,6 +1,6 @@
 ## Project idea
 
-This app gives you a Scheduler component which accepts data in JSON format from a server, visualizes the data
+This app gives you a MUI-based Scheduler component which accepts data in JSON format from a server, visualizes the data
 in the table, takes the user's table modifications on data and posts data back to the server.
 
 ## Scheduler features
@@ -13,15 +13,19 @@ Local data is saved in the browser's storage to prevent losing data on a refresh
 
 There are two custom hooks, useHandleJsonPeriods and useCreateRow, that deal with data refactoring.
 useHandleJsonPeriods returns two functions getPeriodCells, postPeriodCells
-
+```javascript
 const { getPeriodCells, postPeriodCells } = useHandleJsonPeriods();
+```
 
 #### To get data
 
 We call getPeriodCells inside useEffect to refactor fetched data into proper Scheduler format.
 
 getPeriodCells accepts two parameters: JSON from the server and rows
-getPeriodCells(fakeFetchDays, rows)
+
+```javascript
+getPeriodCells(json, rows)
+```
 
 useCreateRows hook returns rows at the top of the Scheduler.
 
@@ -38,10 +42,12 @@ Changing colours inside this will affect changing of colours in the table.
 ## Displaying
 
 Scheduler must be wrapped in a container with such CSS properties:
+```javascript
 {
 minHeight: "100vh",
 display: "flex"
 }
+```
 
 ## To start the project in developer mode, run in terminal
 
