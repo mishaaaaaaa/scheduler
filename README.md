@@ -1,70 +1,48 @@
-# Getting Started with Create React App
+## Project idea
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+This app gives you a Scheduler component which accepts data in JSON format from a server, visualizes the data
+in the table, takes the user's table modifications on data and posts data back to the server.
 
-## Available Scripts
+## Scheduler features
 
-In the project directory, you can run:
+The scheduler component visualizes given data from a server and offers users the ability to modify the data by changing Scheduler Table
+rows and cells and posts data back to the server.
+Local data is saved in the browser's storage to prevent losing data on a refreshing page.
+
+## Working with Scheduler
+
+There are two custom hooks, useHandleJsonPeriods and useCreateRow, that deal with data refactoring.
+useHandleJsonPeriods returns two functions getPeriodCells, postPeriodCells
+
+const { getPeriodCells, postPeriodCells } = useHandleJsonPeriods();
+
+#### To get data
+
+We call getPeriodCells inside useEffect to refactor fetched data into proper Scheduler format.
+
+getPeriodCells accepts two parameters: JSON from the server and rows
+getPeriodCells(fakeFetchDays, rows)
+
+useCreateRows hook returns rows at the top of the Scheduler.
+
+#### To post data
+
+We call postPeriodCells inside useEffect to send JSON based on what did user selected.
+postPeriodCells accepts one parameter - the local Scheduler state defined at the top of the component.
+
+## Customization
+
+All used table colours of Scheduler are located in tableColors inside the styling folder.
+Changing colours inside this will affect changing of colours in the table.
+
+## Displaying
+
+Scheduler must be wrapped in a container with such CSS properties:
+{
+minHeight: "100vh",
+display: "flex"
+}
+
+## To start the project in developer mode, run in terminal
 
 ### `npm start`
-
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
-
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
-
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
-
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)

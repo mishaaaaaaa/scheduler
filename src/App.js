@@ -1,6 +1,6 @@
 import "./App.css";
 import Scheduler from "./Scheduler/Scheduler";
-import { Container, Box } from "@mui/material/";
+import { Container } from "@mui/material/";
 import { styled } from "@mui/material/styles";
 
 const AppContainer = styled(Container)({
@@ -8,13 +8,6 @@ const AppContainer = styled(Container)({
   minHeight: "100vh",
   display: "flex",
 });
-
-// const SchedulerWrapper = styled(Box)({
-//   flexGrow: 1,
-//   display: "flex",
-//   justifyContent: "center",
-//   alignItems: "center",
-// });
 
 function App() {
   return (

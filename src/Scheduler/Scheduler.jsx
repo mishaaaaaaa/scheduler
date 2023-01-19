@@ -15,7 +15,7 @@ import { tableHeadCellsPeriods } from "./consts/tableConsts";
 import TableHeadCell from "./scheduler_components/table/TableHeadCell";
 import TableBodyCell from "./scheduler_components/table/TableBodyCell";
 import fakeFetchDays from "./consts/fakeFetchDays.json";
-import useHandlePeriod from "./hooks/useHandlePeriod";
+import useHandleJsonPeriods from "./hooks/useHandleJsonPeriods";
 import TableBodyTitleCell from "./scheduler_components/table/TableBodyTitleCell";
 import TableButtonGroup from "./scheduler_components/TableButtonGroup";
 import useCreateRows from "./hooks/useCreateRows";
@@ -26,8 +26,8 @@ export default function Scheduler() {
     const days = localStorage.getItem("daysActivity");
     return days === undefined ? [] : JSON.parse(days);
   });
-  const { getPeriodCells, postPeriodCells } = useHandlePeriod();
   const rows = useCreateRows();
+  const { getPeriodCells, postPeriodCells } = useHandleJsonPeriods();
 
   function handleCellClick(dayIndex, cellIndex) {
     const newDaysActivity = daysActivity.map((day, dayI) => {
@@ -92,7 +92,7 @@ export default function Scheduler() {
   function handleSaveTableChanges() {
     const pickedDaysActivityJSON = postPeriodCells(daysActivity);
     console.log(pickedDaysActivityJSON);
-    // here will be some fetch logic to post picked variants to server
+    //TODO: here must be some fetch logic to post picked variants to server
   }
 
   function handleMousePressedSelection(dayIndex, cellIndex) {
@@ -118,8 +118,8 @@ export default function Scheduler() {
 
   useEffect(() => {
     if (typeof localStorage.getItem("daysActivity") === "undefined") {
-      setDaysActivity(getPeriodCells(fakeFetchDays, rows)); // eslint-disable-next-line
-    }
+      setDaysActivity(getPeriodCells(fakeFetchDays, rows));
+    } // eslint-disable-next-line
   }, []);
 
   useEffect(() => {

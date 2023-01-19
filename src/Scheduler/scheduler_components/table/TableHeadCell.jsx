@@ -1,6 +1,6 @@
 import React from "react";
 import TableCell from "@mui/material/TableCell";
-import { tableColors } from "../tableColors";
+import { tableColors } from "../../styling/tableColors";
 
 export default function TableHeadCell({
   cellColSpan,

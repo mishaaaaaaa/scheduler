@@ -1,4 +1,4 @@
-export default function useHandlePeriod() {
+export default function useHandleJsonPeriods() {
   function getPeriodCells(json, tableRows) {
     function jsonToArray(json) {
       let daysArr = [];
