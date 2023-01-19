@@ -1,8 +1,6 @@
 import React from "react";
 import TableCell from "@mui/material/TableCell";
-import { grey } from "@mui/material/colors";
-
-const tableGray = grey[300];
+import { tableColors } from "../tableColors";
 
 function TableBodyCell({
   isSelected,
@@ -14,11 +12,11 @@ function TableBodyCell({
 }) {
   const bodyCellStyle = {
     padding: "30px 10px",
-    border: `1px solid ${tableGray}`,
-    bgcolor: isSelected ? "grey" : "none",
+    border: `1px solid ${tableColors.tableBorderColor}`,
+    bgcolor: isSelected ? `${tableColors.cellOnclickBgcolor} ` : "none",
     "&:hover": {
       cursor: "pointer",
-      bgcolor: "lightgrey",
+      bgcolor: `${tableColors.cellHoverBgcolor} `,
     },
     userSelect: "none",
   };

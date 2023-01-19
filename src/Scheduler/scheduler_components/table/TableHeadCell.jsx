@@ -1,9 +1,7 @@
 import React from "react";
 import TableCell from "@mui/material/TableCell";
+import { tableColors } from "../tableColors";
 
-import { grey } from "@mui/material/colors";
-
-const tableGray = grey[300];
 export default function TableHeadCell({
   cellColSpan,
   cellPadding,
@@ -14,7 +12,9 @@ export default function TableHeadCell({
     width: 50,
     align: "left",
     padding: cellPadding,
-    borderLeft: headCellBorder ? `1px solid ${tableGray}` : "none",
+    borderLeft: headCellBorder
+      ? `1px solid ${tableColors.tableBorderColor}`
+      : "none",
   };
 
   return (
