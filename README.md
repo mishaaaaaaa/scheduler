@@ -24,7 +24,7 @@ We call getPeriodCells inside useEffect to refactor fetched data into proper Sch
 getPeriodCells accepts two parameters: JSON from the server and rows
 
 ```javascript
-getPeriodCells(fakeFetchDays, rows)
+getPeriodCells(json, rows)
 ```
 
 useCreateRows hook returns rows at the top of the Scheduler.
@@ -47,7 +47,7 @@ Scheduler must be wrapped in a container with such CSS properties:
 minHeight: "100vh",
 display: "flex"
 }
-```javascript
+```
 
 ## To start the project in developer mode, run in terminal
 
