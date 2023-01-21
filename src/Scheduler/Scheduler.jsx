@@ -18,12 +18,11 @@ import SchedulerTable from "./scheduler_components/SchedulerTable";
 import Loader from "./scheduler_components/Loader";
 
 export default function Scheduler() {
-  // const [daysActivity, setDaysActivity] = useState(() => {
-  //   const days = localStorage.getItem("daysActivity");
-  //   return days === undefined ? [] : JSON.parse(days);
-  // });
+  const [daysActivity, setDaysActivity] = useState(() => {
+    const days = localStorage.getItem("daysActivity");
+    return JSON.parse(days) || [];
+  });
 
-  const [daysActivity, setDaysActivity] = useState([]);
   const rows = useCreateRows();
   const { getPeriodCells, postPeriodCells } = useHandleJsonPeriods();
 
@@ -111,19 +110,19 @@ export default function Scheduler() {
   function handleSaveTableChanges() {
     const pickedDaysActivityJSON = postPeriodCells(daysActivity);
     console.log(pickedDaysActivityJSON);
-    //TODO: here must be some fetch logic to post picked variants to server
+    // TODO: here must be some fetch logic to post picked variants to server
   }
 
   useEffect(() => {
-    // if (typeof localStorage.getItem("daysActivity") === "undefined") {
-
-    //  } // eslint-disable-next-line
-    setDaysActivity(getPeriodCells(fakeFetchDays, rows));
+    if (typeof localStorage.getItem("daysActivity") === "undefined") {
+      // TODO: here must be some fetch logic to to get activity from server
+      setDaysActivity(getPeriodCells(fakeFetchDays, rows));
+    } // eslint-disable-next-line
   }, []);
 
-  // useEffect(() => {
-  //   localStorage.setItem("daysActivity", JSON.stringify(daysActivity));
-  // }, [daysActivity]);
+  useEffect(() => {
+    localStorage.setItem("daysActivity", JSON.stringify(daysActivity));
+  }, [daysActivity]);
 
   return (
     <TablePageWrapper>
