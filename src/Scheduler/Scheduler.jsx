@@ -22,10 +22,12 @@ import useCreateRows from "./hooks/useCreateRows";
 import SchedulerTable from "./scheduler_components/SchedulerTable";
 
 export default function Scheduler() {
-  const [daysActivity, setDaysActivity] = useState(() => {
-    const days = localStorage.getItem("daysActivity");
-    return days === undefined ? [] : JSON.parse(days);
-  });
+  // const [daysActivity, setDaysActivity] = useState(() => {
+  //   const days = localStorage.getItem("daysActivity");
+  //   return days === undefined ? [] : JSON.parse(days);
+  // });
+
+  const [daysActivity, setDaysActivity] = useState([]);
   const rows = useCreateRows();
   const { getPeriodCells, postPeriodCells } = useHandleJsonPeriods();
 
@@ -117,14 +119,14 @@ export default function Scheduler() {
   }
 
   useEffect(() => {
-    if (typeof localStorage.getItem("daysActivity") === "undefined") {
-      setDaysActivity(getPeriodCells(fakeFetchDays, rows));
-    } // eslint-disable-next-line
+    // if (typeof localStorage.getItem("daysActivity") === "undefined") {
+    setDaysActivity(getPeriodCells(fakeFetchDays, rows));
+    //  } // eslint-disable-next-line
   }, []);
 
-  useEffect(() => {
-    localStorage.setItem("daysActivity", JSON.stringify(daysActivity));
-  }, [daysActivity]);
+  // useEffect(() => {
+  //   localStorage.setItem("daysActivity", JSON.stringify(daysActivity));
+  // }, [daysActivity]);
 
   return (
     <TablePageWrapper>
