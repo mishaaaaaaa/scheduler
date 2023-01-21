@@ -1,11 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
-import {
-  TableBody,
-  TableHead,
-  TableRow,
-  CircularProgress,
-} from "@mui/material/";
+import { TableBody, TableHead, TableRow } from "@mui/material/";
 import {
   TablePageWrapper,
   TableWrapper,
@@ -20,6 +15,7 @@ import TableBodyTitleCell from "./scheduler_components/table/TableBodyTitleCell"
 import TableButtonGroup from "./scheduler_components/TableButtonGroup";
 import useCreateRows from "./hooks/useCreateRows";
 import SchedulerTable from "./scheduler_components/SchedulerTable";
+import Loader from "./scheduler_components/Loader";
 
 export default function Scheduler() {
   // const [daysActivity, setDaysActivity] = useState(() => {
@@ -120,8 +116,9 @@ export default function Scheduler() {
 
   useEffect(() => {
     // if (typeof localStorage.getItem("daysActivity") === "undefined") {
-    setDaysActivity(getPeriodCells(fakeFetchDays, rows));
+
     //  } // eslint-disable-next-line
+    setDaysActivity(getPeriodCells(fakeFetchDays, rows));
   }, []);
 
   // useEffect(() => {
@@ -131,7 +128,7 @@ export default function Scheduler() {
   return (
     <TablePageWrapper>
       {daysActivity.length === 0 ? (
-        <CircularProgress size={"130px"} />
+        <Loader />
       ) : (
         <TableWrapper>
           <h2>Set Schedule</h2>
