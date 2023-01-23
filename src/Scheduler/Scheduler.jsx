@@ -10,21 +10,18 @@ import { tableHeadCellsPeriods } from "./consts/tableConsts";
 import TableHeadCell from "./scheduler_components/table/TableHeadCell";
 import TableBodyCell from "./scheduler_components/table/TableBodyCell";
 import fakeFetchDays from "./consts/fakeFetchDays.json";
-import useHandleJsonPeriods from "./hooks/useHandleJsonPeriods";
 import TableBodyTitleCell from "./scheduler_components/table/TableBodyTitleCell";
 import TableButtonGroup from "./scheduler_components/TableButtonGroup";
 import useCreateRows from "./hooks/useCreateRows";
+import useHandleJsonPeriods from "./hooks/useHandleJsonPeriods";
 import SchedulerTable from "./scheduler_components/SchedulerTable";
 import Loader from "./scheduler_components/Loader";
 
 export default function Scheduler() {
-  const [daysActivity, setDaysActivity] = useState(() => {
-    const days = localStorage.getItem("daysActivity");
-    return JSON.parse(days) || [];
-  });
-
+  const [daysActivity, setDaysActivity] = useState([]);
   const rows = useCreateRows();
   const { getPeriodCells, postPeriodCells } = useHandleJsonPeriods();
+  const [loading, setLoading] = useState(false);
 
   function handleCellClick(dayIndex, cellIndex) {
     const newDaysActivity = daysActivity.map((day, dayI) => {
@@ -114,19 +111,19 @@ export default function Scheduler() {
   }
 
   useEffect(() => {
-    if (typeof localStorage.getItem("daysActivity") === "undefined") {
-      // TODO: here must be some fetch logic to to get activity from server
+    // fetch call simulation
+    setLoading(true);
+    setTimeout(() => {
       setDaysActivity(getPeriodCells(fakeFetchDays, rows));
-    } // eslint-disable-next-line
-  }, []);
+      setLoading(false);
+    }, 1100);
 
-  useEffect(() => {
-    localStorage.setItem("daysActivity", JSON.stringify(daysActivity));
-  }, [daysActivity]);
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <TablePageWrapper>
-      {daysActivity.length === 0 ? (
+      {loading ? (
         <Loader />
       ) : (
         <TableWrapper>
