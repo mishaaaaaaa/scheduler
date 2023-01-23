@@ -29,7 +29,7 @@ export default function Scheduler() {
       if (dayI === dayIndex) {
         return {
           day: day.day,
-          isSelectedRowPeriod: day.isSelectedRowPeriod,
+          isSelectedRowPeriod: day.isSelectedRowPeriod && false,
           data: day.data.map((period, periodI) => {
             if (periodI === cellIndex) {
               return {
