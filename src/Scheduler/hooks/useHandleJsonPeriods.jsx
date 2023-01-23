@@ -52,7 +52,7 @@ export default function useHandleJsonPeriods() {
       return rows.map((day, dayIndex) => {
         return {
           day: day.day,
-          isSelectedRowPeriod: day.isSelectedRowPeriod,
+          isSelectedRowPeriod: week[dayIndex].markedPeriodIndexs.length === 24,
           data: day.data.map((dayPeriod, dayPeriodIndex) => {
             if (
               week[dayIndex].markedPeriodIndexs.some(
