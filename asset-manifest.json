@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/scheduler-app/static/css/main.e6c13ad2.css",
-    "main.js": "/scheduler-app/static/js/main.d80952d3.js",
+    "main.js": "/scheduler-app/static/js/main.14c42930.js",
     "index.html": "/scheduler-app/index.html",
     "main.e6c13ad2.css.map": "/scheduler-app/static/css/main.e6c13ad2.css.map",
-    "main.d80952d3.js.map": "/scheduler-app/static/js/main.d80952d3.js.map"
+    "main.14c42930.js.map": "/scheduler-app/static/js/main.14c42930.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.d80952d3.js"
+    "static/js/main.14c42930.js"
   ]
 }
