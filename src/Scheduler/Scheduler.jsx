@@ -9,6 +9,7 @@ import RowCheckbox from "./scheduler_components/table/RowCheckbox";
 import { tableHeadCellsPeriods } from "./consts/tableConsts";
 import TableHeadCell from "./scheduler_components/table/TableHeadCell";
 import TableBodyCell from "./scheduler_components/table/TableBodyCell";
+import TableHeadDaysCell from "./scheduler_components/table/TableHeadDaysCell";
 import fakeFetchDays from "./consts/fakeFetchDays.json";
 import TableBodyTitleCell from "./scheduler_components/table/TableBodyTitleCell";
 import TableButtonGroup from "./scheduler_components/TableButtonGroup";
@@ -63,6 +64,22 @@ export default function Scheduler() {
         };
       }
       return day;
+    });
+    setDaysActivity(newDaysActivity);
+  }
+
+  function handleAllDaysSelect(isSelected) {
+    const newDaysActivity = daysActivity.map((day) => {
+      return {
+        day: day.day,
+        isSelectedRowPeriod: isSelected,
+        data: day.data.map((period) => {
+          return {
+            ...period,
+            isSelectedCellPeriod: isSelected,
+          };
+        }),
+      };
     });
     setDaysActivity(newDaysActivity);
   }
@@ -144,7 +161,11 @@ export default function Scheduler() {
               </TableRow>
               <TableRow>
                 <TableHeadCell></TableHeadCell>
-                <TableHeadCell cellPadding={0} innerText="All day" />
+                <TableHeadDaysCell
+                  cellPadding={0}
+                  innerText="All day"
+                  onAllDaysSelect={handleAllDaysSelect}
+                />
                 {tableHeadCellsPeriods.map((period) => (
                   <TableHeadCell key={period} cellColSpan={3} headCellBorder />
                 ))}
@@ -159,6 +180,7 @@ export default function Scheduler() {
                       <RowCheckbox
                         onRowSelect={handleRowChange}
                         dayIndex={dayIndex}
+                        daysActivity={daysActivity}
                       />
                     </TableBodyTitleCell>
                     {day.data.map((period, periodIndex) => (

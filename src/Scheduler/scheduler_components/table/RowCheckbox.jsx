@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { Checkbox } from "@mui/material";
-function RowCheckbox({ onRowSelect, dayIndex }) {
-  const [checked, setChecked] = useState(false);
+function RowCheckbox({ onRowSelect, dayIndex, daysActivity }) {
+  const isRowSelected = daysActivity[dayIndex].isSelectedRowPeriod;
+  const [checked, setChecked] = useState(isRowSelected);
+
   const handleCheckboxChange = (event) => {
-    setChecked(event.target.checked);
+    setChecked(!isRowSelected);
     onRowSelect(!checked, dayIndex);
   };
 
@@ -11,7 +13,7 @@ function RowCheckbox({ onRowSelect, dayIndex }) {
     <Checkbox
       size="small"
       style={{ padding: 5 }}
-      checked={checked}
+      checked={isRowSelected}
       onChange={handleCheckboxChange}
     />
   );
